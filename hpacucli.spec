@@ -2,7 +2,7 @@ Summary:	HP Array Configuration Utility CLI
 Name:		hpacucli
 Version:	7.85
 Release:	0.1
-License:	?
+License:	not distributable (Hewlett-Packard End User License Agreement)
 Group:		Applications
 Source0:	ftp://ftp.hp.com/pub/softlib2/software1/pubsw-linux/p308169736/v41554/%{name}-%{version}-18.linux.rpm
 # NoSource0-md5:	9c324442c9a15ce1461f05c48f494f73
