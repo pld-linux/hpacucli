@@ -22,12 +22,12 @@ rpm2cpio %{SOURCE0} | cpio -dimu
 
 mv opt/compaq/hpacucli/bld/hpacucli-*.linux.txt hpacucli-linux.txt
 mv opt/compaq/hpacucli/bld/hpacucli.license .
-rm -f opt/compaq/hpacucli/bld/hpacucli # same as one in sbin
+rm -f opt/compaq/hpacucli/bld/hpacucli # same as one in sbin, however we write better one
 
 cat <<'EOF' > hpacucli
 #!/bin/sh
 export ACUXE_LOCK_FILES_DIR=/var/run/hpacucli
-if [ $(uname -m) == "ia64" ]; then
+if [ $(uname -m) = "ia64" ]; then
 	exec prctl --unaligned=silent %{_libdir}/hpacucli ${1:+"$@"}
 else
 	exec %{_libdir}/hpacucli ${1:+"$@"}
@@ -52,9 +52,9 @@ touch /var/run/hpacucli/CPQACU_MUTEX
 %defattr(644,root,root,755)
 %doc hpacucli-linux.txt hpacucli.license
 %attr(755,root,root) %{_sbindir}/hpacucli
-%{_libdir}/hpacucli
-%{_libdir}/libcpqimgr.so
-%{_libdir}/libhwmim3.so
-%{_libdir}/libossingleton.so
+%attr(755,root,root) %{_libdir}/hpacucli
+%attr(755,root,root) %{_libdir}/libcpqimgr.so
+%attr(755,root,root) %{_libdir}/libhwmim3.so
+%attr(755,root,root) %{_libdir}/libossingleton.so
 %dir %attr(700,root,root) /var/run/hpacucli
 %ghost %attr(600,root,root) /var/run/hpacucli/CPQACU_MUTEX
