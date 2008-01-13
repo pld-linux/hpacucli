@@ -1,4 +1,5 @@
 Summary:	HP Array Configuration Utility CLI
+Summary(pl.UTF-8):	Narzędzie CLI do konfiguracji macierzy dyskowych HP (Smart Array i RAID Array)
 Name:		hpacucli
 Version:	7.85
 Release:	18
@@ -13,8 +14,13 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 The Array Configuration Utility CLI is a commandline-based disk
-configuration program for Smart Array Controllers and RAID Array
-Controllers.
+configuration program for Hewlett-Packard Smart Array Controllers
+and RAID Array Controllers.
+
+%description -l pl.UTF-8
+HP Array Configuration Utility CLI to działający z linii poleceń
+program do konfiguracji dysków w macierzach z kontrolerami Smart
+Array i RAID Array firmy Hewlett-Packard.
 
 %prep
 %setup -qcT
