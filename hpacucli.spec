@@ -63,4 +63,4 @@ touch /var/run/hpacucli/CPQACU_MUTEX
 %attr(755,root,root) %{_libdir}/libhwmim3.so
 %attr(755,root,root) %{_libdir}/libossingleton.so
 %dir %attr(700,root,root) /var/run/hpacucli
-%ghost %attr(600,root,root) /var/run/hpacucli/CPQACU_MUTEX
+%attr(600,root,root) %ghost /var/run/hpacucli/CPQACU_MUTEX
