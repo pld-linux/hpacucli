@@ -11,6 +11,8 @@ Source0:	ftp://ftp.hp.com/pub/softlib2/software1/pubsw-linux/p414707558/v61432/%
 NoSource:	0
 URL:		http://h20000.www2.hp.com/bizsupport/TechSupport/SoftwareDescription.jsp?swItem=MTX-8d3c35f1321042e69094ef3dd3
 ExclusiveArch:	%{ix86}
+# hpacucli dlopens libemsdm.so, libqlsdm.so at runtime
+Suggests:	fibreutils
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		locksdir	/var/lock/hpacucli
