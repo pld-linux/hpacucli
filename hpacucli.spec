@@ -30,13 +30,20 @@ i RAID Array firmy Hewlett-Packard.
 rpm2cpio %{SOURCE0} | cpio -dimu
 
 mv usr/man .
+gzip -d man/*/*.gz
 
 mv opt/compaq/hpacucli/bld/hpacucli-*.noarch.txt hpacucli.txt
 mv opt/compaq/hpacucli/bld/hpacucli.license .
 
+# fix paths
 %{__sed} -i -e '
 	/APP_LOCK_DIR/ s#/var/opt/compaq/locks#%{locksdir}#
 ' opt/compaq/hpacucli/bld/mklocks.sh
+
+# fix man paths
+%{__sed} -i -e '
+	s#/opt/compaq/hpacucli/bld/hpacucli-VERSION.linux.txt#%{_docdir}/%{name}-%{version}/hpacucli.txt#
+' man/man8/*
 
 # figure out what locks are used
 grep touch opt/compaq/hpacucli/bld/mklocks.sh | sort -u > mklocks.sh
