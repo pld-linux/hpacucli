@@ -1,68 +1,82 @@
+%define		_enable_debug_packages	0
 Summary:	HP Array Configuration Utility CLI
 Summary(pl.UTF-8):	Narzędzie CLI do konfiguracji macierzy dyskowych HP (Smart Array i RAID Array)
 Name:		hpacucli
-Version:	7.85
-Release:	18
+Version:	8.60
+Release:	8.0
 License:	not distributable (Hewlett-Packard End User License Agreement)
 Group:		Applications
-Source0:	ftp://ftp.hp.com/pub/softlib2/software1/pubsw-linux/p308169736/v41554/%{name}-%{version}-18.linux.rpm
-# NoSource0-md5:	9c324442c9a15ce1461f05c48f494f73
+Source0:	ftp://ftp.hp.com/pub/softlib2/software1/pubsw-linux/p414707558/v61432/%{name}-%{version}-%{release}.noarch.rpm
+# NoSource0-md5:	d5105f626ce4e73f77b8be9f1b215300
 NoSource:	0
 URL:		http://h20000.www2.hp.com/bizsupport/TechSupport/SoftwareDescription.jsp?swItem=MTX-8d3c35f1321042e69094ef3dd3
 ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define		_enable_debug_packages	0
+%define		locksdir	/var/lock/hpacucli
 
 %description
 The Array Configuration Utility CLI is a commandline-based disk
-configuration program for Hewlett-Packard Smart Array Controllers
-and RAID Array Controllers.
+configuration program for Hewlett-Packard Smart Array Controllers and
+RAID Array Controllers.
 
 %description -l pl.UTF-8
 HP Array Configuration Utility CLI to działający z linii poleceń
-program do konfiguracji dysków w macierzach z kontrolerami Smart
-Array i RAID Array firmy Hewlett-Packard.
+program do konfiguracji dysków w macierzach z kontrolerami Smart Array
+i RAID Array firmy Hewlett-Packard.
 
 %prep
 %setup -qcT
 rpm2cpio %{SOURCE0} | cpio -dimu
 
-mv opt/compaq/hpacucli/bld/hpacucli-*.linux.txt hpacucli-linux.txt
+mv usr/man .
+
+mv opt/compaq/hpacucli/bld/hpacucli-*.noarch.txt hpacucli.txt
 mv opt/compaq/hpacucli/bld/hpacucli.license .
-rm -f opt/compaq/hpacucli/bld/hpacucli # same as one in sbin, however we write better one
+
+%{__sed} -i -e '
+	/APP_LOCK_DIR/ s#/var/opt/compaq/locks#%{locksdir}#
+' opt/compaq/hpacucli/bld/mklocks.sh
+
+# figure out what locks are used
+grep touch opt/compaq/hpacucli/bld/mklocks.sh | sort -u > mklocks.sh
 
 cat <<'EOF' > hpacucli
 #!/bin/sh
-export ACUXE_LOCK_FILES_DIR=/var/run/hpacucli
+PROGRAM=${0##*/}
+export ACUXE_LOCK_FILES_DIR=%{locksdir}
 if [ $(uname -m) = "ia64" ]; then
-	exec prctl --unaligned=silent %{_libdir}/hpacucli ${1:+"$@"}
+	exec prctl --unaligned=silent %{_libdir}/$PROGRAM "$@"
 else
-	exec %{_libdir}/hpacucli ${1:+"$@"}
+	exec %{_libdir}/$PROGRAM "$@"
 fi
 EOF
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sbindir},%{_libdir},/var/run/hpacucli}
-install opt/compaq/hpacucli/bld/.hpacucli $RPM_BUILD_ROOT%{_libdir}/hpacucli
-install opt/compaq/hpacucli/bld/lib*.so $RPM_BUILD_ROOT%{_libdir}
-install hpacucli $RPM_BUILD_ROOT%{_sbindir}/hpacucli
-touch $RPM_BUILD_ROOT/var/run/hpacucli/CPQACU_MUTEX
+install -d $RPM_BUILD_ROOT{%{_sbindir},%{_libdir},%{_mandir}/man8,%{locksdir}}
+install -p opt/compaq/hpacucli/bld/.hpacucli $RPM_BUILD_ROOT%{_libdir}/hpacucli
+install -p opt/compaq/hpacucli/bld/.hpacuscripting $RPM_BUILD_ROOT%{_libdir}/hpacuscripting
+install -p opt/compaq/hpacucli/bld/lib*.so $RPM_BUILD_ROOT%{_libdir}
+install -p hpacucli $RPM_BUILD_ROOT%{_sbindir}/hpacucli
+ln $RPM_BUILD_ROOT%{_sbindir}/{hpacucli,hpacuscripting}
+
+cp -a man/man8/* $RPM_BUILD_ROOT%{_mandir}/man8
+
+# touch locks
+APP_LOCK_DIR=$RPM_BUILD_ROOT%{locksdir} sh -x mklocks.sh
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
-touch /var/run/hpacucli/CPQACU_MUTEX
-
 %files
 %defattr(644,root,root,755)
-%doc hpacucli-linux.txt hpacucli.license
+%doc hpacucli.txt hpacucli.license
 %attr(755,root,root) %{_sbindir}/hpacucli
+%attr(755,root,root) %{_sbindir}/hpacuscripting
 %attr(755,root,root) %{_libdir}/hpacucli
+%attr(755,root,root) %{_libdir}/hpacuscripting
 %attr(755,root,root) %{_libdir}/libcpqimgr.so
-%attr(755,root,root) %{_libdir}/libhwmim3.so
-%attr(755,root,root) %{_libdir}/libossingleton.so
-%dir %attr(700,root,root) /var/run/hpacucli
-%attr(600,root,root) %ghost /var/run/hpacucli/CPQACU_MUTEX
+%{_mandir}/man8/hpacucli.8*
+%dir %attr(700,root,root) %{locksdir}
+%{locksdir}/*
