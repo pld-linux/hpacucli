@@ -51,7 +51,7 @@ grep touch opt/compaq/hpacucli/bld/mklocks.sh | sort -u > mklocks.sh
 cat <<'EOF' > hpacucli
 #!/bin/sh
 PROGRAM=${0##*/}
-export ACUXE_LOCK_FILES_DIR=%{locksdir}
+export ACUXE_LOCK_FILES_DIR=%{locksdir}/
 if [ $(uname -m) = "ia64" ]; then
 	exec prctl --unaligned=silent %{_libdir}/$PROGRAM "$@"
 else
