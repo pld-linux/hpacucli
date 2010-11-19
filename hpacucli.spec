@@ -12,6 +12,8 @@ URL:		http://h20000.www2.hp.com/bizsupport/TechSupport/SoftwareDescription.jsp?s
 ExclusiveArch:	%{ix86}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define		_enable_debug_packages	0
+
 %description
 The Array Configuration Utility CLI is a commandline-based disk
 configuration program for Hewlett-Packard Smart Array Controllers
