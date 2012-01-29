@@ -2,14 +2,14 @@
 Summary:	HP Array Configuration Utility CLI
 Summary(pl.UTF-8):	Narzędzie CLI do konfiguracji macierzy dyskowych HP (Smart Array i RAID Array)
 Name:		hpacucli
-Version:	8.60
+Version:	8.70
 Release:	8.0
 License:	not distributable (Hewlett-Packard End User License Agreement)
 Group:		Applications
-Source0:	ftp://ftp.hp.com/pub/softlib2/software1/pubsw-linux/p414707558/v61432/%{name}-%{version}-%{release}.noarch.rpm
+Source0:	ftp://ftp.hp.com/pub/softlib2/software1/pubsw-linux/p414707558/v63381/%{name}-%{version}-%{release}.noarch.rpm
 # NoSource0-md5:	d5105f626ce4e73f77b8be9f1b215300
 NoSource:	0
-URL:		http://h20000.www2.hp.com/bizsupport/TechSupport/SoftwareDescription.jsp?swItem=MTX-8d3c35f1321042e69094ef3dd3
+URL:		http://h20000.www2.hp.com/bizsupport/TechSupport/SoftwareDescription.jsp?swItem=MTX-08be00e0ba8b42ff9002a084e7
 ExclusiveArch:	%{ix86}
 # hpacucli dlopens libemsdm.so, libqlsdm.so at runtime
 Suggests:	fibreutils
