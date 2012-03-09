@@ -15,6 +15,7 @@ ExclusiveArch:	%{ix86}
 Suggests:	fibreutils
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
+%define		_noautoreqdep libstdc++.so.6
 %define		locksdir	/var/lock/hpacucli
 
 %description
