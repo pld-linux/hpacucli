@@ -2,21 +2,22 @@
 Summary:	HP Array Configuration Utility CLI
 Summary(pl.UTF-8):	Narzędzie CLI do konfiguracji macierzy dyskowych HP (Smart Array i RAID Array)
 Name:		hpacucli
-Version:	9.0
-Release:	24.0
+Version:	9.30
+Release:	15.0
 License:	not distributable (Hewlett-Packard End User License Agreement)
 Group:		Applications
-Source0:	ftp://ftp.hp.com/pub/softlib2/software1/pubsw-linux/p414707558/v68034/%{name}-%{version}-%{release}.noarch.rpm
-# NoSource0-md5:	35299947af84f9e7145f2a64c792964c
+Source0:	ftp://ftp.hp.com/pub/softlib2/software1/pubsw-linux/p414707558/v77371/%{name}-%{version}-%{release}.i386.rpm
+# NoSource0-md5:	41b809499716ea30c67e9dbf81fe150
+Source1:	ftp://ftp.hp.com/pub/softlib2/software1/pubsw-linux/p1257348637/v77370/%{name}-%{version}-%{release}.x86_64.rpm
+# NoSource1-md5:	37b559c4a2f873e8b23369f6a9b926c
 NoSource:	0
+NoSource:	1
 URL:		http://h20000.www2.hp.com/bizsupport/TechSupport/SoftwareDescription.jsp?swItem=MTX-43192cb759444c33a5e8bdefb1
-ExclusiveArch:	%{ix86}
 # hpacucli dlopens libemsdm.so, libqlsdm.so at runtime
 Suggests:	fibreutils
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_noautoreqdep libstdc++.so.6
-%define		locksdir	/var/lock/hpacucli
 
 %description
 The Array Configuration Utility CLI is a commandline-based disk
@@ -30,18 +31,18 @@ i RAID Array firmy Hewlett-Packard.
 
 %prep
 %setup -qcT
+%ifarch %{ix86}
 rpm2cpio %{SOURCE0} | cpio -dimu
+mv opt/compaq/hpacucli/bld/hpacucli-*.i386.txt hpacucli.txt
+%else
+rpm2cpio %{SOURCE1} | cpio -dimu
+mv opt/compaq/hpacucli/bld/hpacucli-*.x86_64.txt hpacucli.txt
+%endif
 
 mv usr/man .
 gzip -d man/*/*.gz
 
-mv opt/compaq/hpacucli/bld/hpacucli-*.noarch.txt hpacucli.txt
 mv opt/compaq/hpacucli/bld/hpacucli.license .
-
-# fix paths
-%{__sed} -i -e '
-	/APP_LOCK_DIR/ s#/var/opt/compaq/locks#%{locksdir}#
-' opt/compaq/hpacucli/bld/mklocks.sh
 
 # fix man paths
 %{__sed} -i -e '
@@ -54,7 +55,6 @@ grep touch opt/compaq/hpacucli/bld/mklocks.sh | sort -u > mklocks.sh
 cat <<'EOF' > hpacucli
 #!/bin/sh
 PROGRAM=${0##*/}
-export ACUXE_LOCK_FILES_DIR=%{locksdir}/
 if [ $(uname -m) = "ia64" ]; then
 	exec prctl --unaligned=silent %{_libdir}/$PROGRAM "$@"
 else
@@ -64,7 +64,7 @@ EOF
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_sbindir},%{_libdir},%{_mandir}/man8,%{locksdir}}
+install -d $RPM_BUILD_ROOT{%{_sbindir},%{_libdir},%{_mandir}/man8}
 install -p opt/compaq/hpacucli/bld/.hpacucli $RPM_BUILD_ROOT%{_libdir}/hpacucli
 install -p opt/compaq/hpacucli/bld/.hpacuscripting $RPM_BUILD_ROOT%{_libdir}/hpacuscripting
 install -p opt/compaq/hpacucli/bld/lib*.so $RPM_BUILD_ROOT%{_libdir}
@@ -72,9 +72,6 @@ install -p hpacucli $RPM_BUILD_ROOT%{_sbindir}/hpacucli
 ln $RPM_BUILD_ROOT%{_sbindir}/{hpacucli,hpacuscripting}
 
 cp -a man/man8/* $RPM_BUILD_ROOT%{_mandir}/man8
-
-# touch locks
-APP_LOCK_DIR=$RPM_BUILD_ROOT%{locksdir} sh -x mklocks.sh
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -86,7 +83,5 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_sbindir}/hpacuscripting
 %attr(755,root,root) %{_libdir}/hpacucli
 %attr(755,root,root) %{_libdir}/hpacuscripting
-%attr(755,root,root) %{_libdir}/libcpqimgr.so
+%attr(755,root,root) %{_libdir}/libcpqimgr*.so
 %{_mandir}/man8/hpacucli.8*
-%dir %attr(700,root,root) %{locksdir}
-%{locksdir}/*
