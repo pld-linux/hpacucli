@@ -15,6 +15,7 @@ NoSource:	1
 URL:		http://h20000.www2.hp.com/bizsupport/TechSupport/SoftwareDescription.jsp?swItem=MTX-43192cb759444c33a5e8bdefb1
 # hpacucli dlopens libemsdm.so, libqlsdm.so at runtime
 Suggests:	fibreutils
+ExclusiveArch:	%{ix86} %{x8664}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		_noautoreqdep libstdc++.so.6
