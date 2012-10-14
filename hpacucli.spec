@@ -7,9 +7,9 @@ Release:	15.0
 License:	not distributable (Hewlett-Packard End User License Agreement)
 Group:		Applications
 Source0:	ftp://ftp.hp.com/pub/softlib2/software1/pubsw-linux/p414707558/v77371/%{name}-%{version}-%{release}.i386.rpm
-# NoSource0-md5:	41b809499716ea30c67e9dbf81fe150
+# NoSource0-md5:	841b809499716ea30c67e9dbf81fe150
 Source1:	ftp://ftp.hp.com/pub/softlib2/software1/pubsw-linux/p1257348637/v77370/%{name}-%{version}-%{release}.x86_64.rpm
-# NoSource1-md5:	37b559c4a2f873e8b23369f6a9b926c
+# NoSource1-md5:	d37b559c4a2f873e8b23369f6a9b926c
 NoSource:	0
 NoSource:	1
 URL:		http://h20000.www2.hp.com/bizsupport/TechSupport/SoftwareDescription.jsp?swItem=MTX-43192cb759444c33a5e8bdefb1
