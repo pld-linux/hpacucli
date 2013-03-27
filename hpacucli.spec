@@ -2,17 +2,17 @@
 Summary:	HP Array Configuration Utility CLI
 Summary(pl.UTF-8):	Narzędzie CLI do konfiguracji macierzy dyskowych HP (Smart Array i RAID Array)
 Name:		hpacucli
-Version:	9.30
-Release:	15.0
+Version:	9.40
+Release:	12.0
 License:	not distributable (Hewlett-Packard End User License Agreement)
 Group:		Applications
-Source0:	ftp://ftp.hp.com/pub/softlib2/software1/pubsw-linux/p414707558/v77371/%{name}-%{version}-%{release}.i386.rpm
-# NoSource0-md5:	841b809499716ea30c67e9dbf81fe150
-Source1:	ftp://ftp.hp.com/pub/softlib2/software1/pubsw-linux/p1257348637/v77370/%{name}-%{version}-%{release}.x86_64.rpm
-# NoSource1-md5:	d37b559c4a2f873e8b23369f6a9b926c
+Source0:	ftp://ftp.hp.com/pub/softlib2/software1/pubsw-linux/p414707558/v80071/%{name}-%{version}-%{release}.i386.rpm
+# NoSource0-md5:	a7d16d2a2db8948b32044832b22ee14a
 NoSource:	0
+Source1:	ftp://ftp.hp.com/pub/softlib2/software1/pubsw-linux/p1257348637/v80070/%{name}-%{version}-%{release}.x86_64.rpm
+# NoSource1-md5:	4c6c5df3f39e82d8e794001dccd1e0af
 NoSource:	1
-URL:		http://h20000.www2.hp.com/bizsupport/TechSupport/SoftwareDescription.jsp?swItem=MTX-43192cb759444c33a5e8bdefb1
+URL:		http://h20000.www2.hp.com/bizsupport/TechSupport/SoftwareDescription.jsp?swItem=MTX-e0ab8f2d629a4748ad073e2943
 # hpacucli dlopens libemsdm.so, libqlsdm.so at runtime
 Suggests:	fibreutils
 ExclusiveArch:	%{ix86} %{x8664}
@@ -72,7 +72,7 @@ install -p opt/compaq/hpacucli/bld/lib*.so $RPM_BUILD_ROOT%{_libdir}
 install -p hpacucli $RPM_BUILD_ROOT%{_sbindir}/hpacucli
 ln $RPM_BUILD_ROOT%{_sbindir}/{hpacucli,hpacuscripting}
 
-cp -a man/man8/* $RPM_BUILD_ROOT%{_mandir}/man8
+cp -p man/man8/* $RPM_BUILD_ROOT%{_mandir}/man8
 
 %clean
 rm -rf $RPM_BUILD_ROOT
